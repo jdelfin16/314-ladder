@@ -59,9 +59,9 @@
 		echo "variable: " . $var . "value: " . $value . "<br />";
 	}
 	
-	// New player has been inserted/added
+	/* New player has been inserted/added
 	$success = insert_player ($db, $data);
 	echo "success: " . $success;
-	
+	*/
 ?>
 
