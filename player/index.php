@@ -15,7 +15,7 @@
 	// Return the number of players in the database
 	function num_of_players ($connection)
 	{
-		$sql = "select * from player";
+		$sql = "select * from player;";
 		$statement = $connection->prepare($sql);
 		$statement->execute();
 		return $statement->rowCount();
@@ -24,30 +24,39 @@
 	// Create/Insert a new player
 	function insert_player ($connection, $player_data)
 	{
-		$sql = "insert into player (name, username, rank, email, phone, password, values)
-			values (:name, :username, :rank, :email, :phone, :password)";
+		$sql = "insert into player (name, username, rank, email, phone, password, values) 
+		values (:name, :username, :rank, :email, :phone, :password);";
+		
 		$statement = $connection->prepare ($sql);
 		$statement->execute ($player_data);
 		return $statement->rowCount () == 1;
 	}
 	
 	//Get/Select player information
-	function select_player ()
+	function select_player ($connection, $player_data)
 	{
-		$sql = "select * from player";
-		
+		$sql = "select * from player;";
+		$statement = $connection->prepare ($sql);
+		$statement->execute ($player_data);
+		return $statement->rowCount () == 1;
 	}
 	
 	// Put/Update player information
-	function update_player ()
+	function update_player ($connection, $player_data)
 	{
-		$sql = "update player set ___ where name = :name";
+		$sql = "update player set ? where name = :name;";
+		$statement = $connection->prepare ($sql);
+		$statement->execute ($player_data);
+		return $statement->rowCount () == 1;
 	}
 	
 	// Delete player
-	function delete_player ()
+	function delete_player ($connection, $player_data)
 	{
-		$sql = "delete from player where name = :name";
+		$sql = "delete from player where name = ?;";
+		$statement = $connection->prepare ($sql);
+		$statement->execute ($player_data);
+		return $statement->rowCount () == 1;
 	}
 	
 	// Find the new rank, show the number of players
@@ -56,12 +65,13 @@
 	
 	foreach ($data as $var => $value)
 	{
-		echo "variable: " . $var . "value: " . $value . "<br />";
+		echo "Variable: " . $var . "Value: " . $value . "<br />";
 	}
 	
-	/* New player has been inserted/added
+	// New player has been inserted/added
 	$success = insert_player ($db, $data);
-	echo "success: " . $success;
-	*/
+	echo "Success: " . $success;
+	
+	echo "Hello World!";
 ?>
 
