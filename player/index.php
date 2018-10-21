@@ -24,12 +24,11 @@
 	// Create/Insert a new player
 	function insert_player ($connection, $player_data)
 	{
-		/*$sql = "insert into player (name, username, rank, email, phone, password, values)
+		$sql = "insert into player (name, username, rank, email, phone, password, values)
 			values (:name, :username, :rank, :email, :phone, :password)";
 		$statement = $connection->prepare ($sql);
 		$statement->execute ($player_data);
 		return $statement->rowCount () == 1;
-		*/
 	}
 	
 	//Get/Select player information
