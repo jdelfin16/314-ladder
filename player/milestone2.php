@@ -1,18 +1,15 @@
 <?php
-
-        include "../rest.php";
-		include "../database.php";
-        
-		$request = new RestRequest();
-        $method = $request->getRequestType();
-        $request_vars = $request->getRequestVariables();
-
-        $response = $request_vars;
-        $response["service"] = "player";
-        $response["method"] = $method;
-
-        $echo json_encode($response);
-		
+	
+	/* Find more information about how "include" works...
+	* Do both PHP files below need to be in the Player's folder?
+	*/
+	include "database.php";
+	// include "C:\Users\totoj\Desktop\314vmshare\htdocs\314-ladder\database.php";
+	
+	include "rest.php";
+	// include "C:\Users\totoj\Desktop\314vmshare\htdocs\314-ladder\rest.php";
+	
+	
 	/** 
 	* UNDERSTAND PHP and CRUD --> SQL
 	* Create = POST --> Insert
@@ -50,22 +47,26 @@
 	/* Get/Select player information
 	function select_player ()
 	{
-		$sql = "select ";
+		
 		
 	}
 	
 	// Put/Update player information
 	function update_player ()
 	{
-		$sql = "update player set ___ where name = :name";
+		
 	}
 	
 	// Delete player
 	function delete_player ()
 	{
-		$sql = "delete from player where name = :name";
+		
 	}
 	*/
+	
+	// Get user input
+	$request = new RestRequest ();
+	$data = $request->getRequestVariables();
 	
 	// Find the new rank
 	$data["rank"] = num_of_players ($db) + 1;
@@ -83,4 +84,3 @@
 	echo "success: " . $success;
 	
 ?>
-
