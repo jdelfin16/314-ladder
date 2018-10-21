@@ -1,31 +1,16 @@
 <?php
 
-        include "../rest.php";
-		include "../database.php";
-        
-		$request = new RestRequest();
-        $method = $request->getRequestType();
-        $request_vars = $request->getRequestVariables();
+	include "../rest.php";
+	include "../database.php";
+	
+	$request = new RestRequest();
+	$method = $request->getRequestType();
+	$request_vars = $request->getRequestVariables();
 
-        $response = $request_vars;
-        $response["service"] = "player";
-        $response["method"] = $method;
-
-        $echo json_encode($response);
-		
-	/** 
-	* UNDERSTAND PHP and CRUD --> SQL
-	* Create = POST --> Insert
-	* Review = GET --> Select
-	* Update = PUT --> Update
-	* Delete = DELETE --> Delete
-	* 
-	* Create functions for player:
-	* Create new players
-	* Get (Select) player info
-	* Put (update) player info
-	* Delete player info
-	*/
+    $response = $request_vars;
+    $response["service"] = "player";
+    $response["method"] = $method;
+	$echo json_encode($response);
 	
 	// Return the number of players in the database
 	function num_of_players ($connection)
@@ -47,10 +32,10 @@
 		*/
 	}
 	
-	/* Get/Select player information
+	//Get/Select player information
 	function select_player ()
 	{
-		$sql = "select ";
+		$sql = "select * from player";
 		
 	}
 	
@@ -65,12 +50,9 @@
 	{
 		$sql = "delete from player where name = :name";
 	}
-	*/
 	
-	// Find the new rank
+	// Find the new rank, show the number of players
 	$data["rank"] = num_of_players ($db) + 1;
-	
-	// Show the number of players
 	echo "Number of Players" . $data["rank"] . "<br />";
 	
 	foreach ($data as $var => $value)
@@ -78,8 +60,8 @@
 		echo "variable: " . $var . "value: " . $value . "<br />";
 	}
 	
+	// New player has been inserted/added
 	$success = insert_player ($db, $data);
-	
 	echo "success: " . $success;
 	
 ?>
