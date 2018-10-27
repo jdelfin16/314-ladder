@@ -59,7 +59,7 @@
 		* (ex. missing parameters, proper email and phone number formats,
 		* repeated player information)
 		*/
-		missing_error($request_vars, $ALL)
+		missing_error($request_vars, $ALL);
 
 		// Proceed to adding the new player
 		$request_vars[$RANK] = num_of_players ($db) + 1;
