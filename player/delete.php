@@ -1,5 +1,4 @@
 <?php
-
   /*
   include "../database.php";
   include "../rest.php";
@@ -14,14 +13,24 @@
   */
 
   // Delete player
-  function delete_player (/*$connection, $player_data*/)
+  function delete_player ($connection, $username)
   {
-    echo "delete_player check!";
-    /*$sql = "delete from player where name = ?;";
-    $statement = $connection->prepare ($sql);
-    $statement->execute ($player_data);
-    return $statement->rowCount () == 1;*/
+    //echo "delete_player check!";
+    $sql = "delete from player where username = ?;";
+
+    // Set up query
+    $statement = $connection->prepare($sql);
+
+    // Run the query
+    $statement->execute ([$username]);
+
+    // Confirmation of deletion
+    //echo "$username is deleted! <br>";
+
+    return $statement->rowCount () == 1;
   }
-
-
+  /*
+  $test = $_GET['username'];
+  echo json_encode(delete_player ($db, $test));
+  */
 ?>

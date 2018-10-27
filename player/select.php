@@ -9,8 +9,10 @@
 
   $response = $request_vars;
   */
+
   //$response["service"] = "player";
   //$response["method"] = $method;
+
 
   //Get/Select player information
   function select_player ($connection, $username)
@@ -31,11 +33,11 @@
     else {
       $player = [];
     }
-
-    return ["player"=>$player];
+    return $player;
   }
+  /*
+  $success = select_player ($db, $test);
 
-  /*$test = "rmills1";
-  select_player($db, $test);
+  echo json_encode(select_player ($db, $request_vars["username"]));
   */
 ?>
