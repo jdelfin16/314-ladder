@@ -44,7 +44,7 @@
 		/* Create a function that checks for errors
 		* (ex. missing parameters)
 		*/
-		missing_error($request_vars, $USERNAME);
+		//missing_error($request_vars, $USERNAME);
 
 		// Proceed to deleting the player
 		// Note: this JSON returns boolean...
@@ -59,7 +59,7 @@
 		* (ex. missing parameters, proper email and phone number formats,
 		* repeated player information)
 		*/
-		missing_error($request_vars, $ALL);
+		//missing_error($request_vars, $ALL);
 
 		// Proceed to adding the new player
 		$request_vars[$RANK] = num_of_players ($db) + 1;
@@ -73,7 +73,7 @@
 		/* Create a function that checks for errors
 		* (ex. missing username)
 		*/
-		missing_error($request_vars, $USERNAME);
+		//missing_error($request_vars, $USERNAME);
 
 		echo json_encode(select_player ($db, $USER));
 	}
