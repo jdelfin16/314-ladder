@@ -1,5 +1,5 @@
 <?php
-
+  /*
   include "../database.php";
   include "../rest.php";
 
@@ -13,33 +13,36 @@
   $response["service"] = "game";
   $response["method"] = $method;
 
-
+  */
   //Get/Select game information
   function select_game ($connection, $username, $played)
   {
     // Query
-    $sql = "select * from game where (winner = $username or loser = $username) and played = $played;";
+    $sql = "select * from game where (winner = :username or loser = :username)
+      and played = :played;";
 
      // If there is no 'played' input...
      if (empty($played))
      {
-       $sql = "select * from game where (winner = $username or loser = $username);";
+       $sql = "select * from game where (winner = :username or loser = :username);";
      }
 
     // Set up query
     $statement = $connection->prepare($sql);
+    $statement->bindParam(':username', $username);
+    $statement->bindParam(':played', $played);
 
     // Run the query
-    $statement->execute ([$username]);
+    $statement->execute();
     if ($statement->rowCount() > 0)
     {
-      $player = $statement->fetch(PDO::FETCH_ASSOC);
+      $game = $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     else {
-      $player = [];
+      $game = [];
     }
-    echo json_encode($player);
+    echo json_encode($game);
   }
 
-  select_game ($db, $request_vars["username"], $request_vars["played"]);
+  // select_game ($db, $request_vars["username"], $request_vars["played"]);
 ?>

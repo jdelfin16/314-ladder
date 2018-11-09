@@ -23,11 +23,9 @@
 	$method = $request->getRequestType();
 	$request_vars = $request->getRequestVariables();
 
-	/*
 	$response = $request_vars;
 	$response["service"] = "player";
 	$response["method"] = $method;
-	*/
 
 	// Return the number of players in the database
 	function num_of_players ($connection)
@@ -48,7 +46,7 @@
 
 		// Proceed to deleting the player
 		// Note: this JSON returns boolean...
-		echo json_encode(delete_player ($db, $request_var[$USER]));
+		echo json_encode(delete_player ($db, $request_vars[$USER]));
 
 	}
 
@@ -64,7 +62,7 @@
 		// Proceed to adding the new player
 		$request_vars[$RANK] = num_of_players ($db) + 1;
 		// Note: this JSON returns boolean...
-		echo json_encode(insert_player($db, $request_vars));
+		echo json_encode(insert_player($db, $request_vars[$RANK]));
 	}
 
 	// V - View the Player
@@ -75,7 +73,7 @@
 		*/
 		//missing_error($request_vars, $USERNAME);
 
-		echo json_encode(select_player ($db, $USER));
+		echo json_encode(select_player ($db, $request_vars[$USER]));
 	}
 	/* E - Edit the Player
 	else if ($request->isPut())

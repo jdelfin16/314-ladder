@@ -1,5 +1,5 @@
 <?php
-  /*
+
   include "../database.php";
   include "../rest.php";
 
@@ -8,11 +8,11 @@
 	$request_vars = $request->getRequestVariables();
 
   $response = $request_vars;
-  //$response["service"] = "player";
-  //$response["method"] = $method;
-  */
+  $response["service"] = "player";
+  $response["method"] = $method;
 
-  /* Return the number of players in the database
+
+  // Return the number of players in the database
 	function num_of_players ($connection)
 	{
 		$sql = "select * from player;";
@@ -20,7 +20,7 @@
 		$statement->execute();
 		return $statement->rowCount();
 	}
-  */
+
   function insert_player ($connection, $player_data)
   {
     // $player_data represents the rank data
@@ -41,14 +41,11 @@
     $statement->execute ($player_data);
 		return $statement->rowCount () == 1;
   }
-  /*Note: the code below is in index.php
-  *------------------------------------------------------------------
+  // Note: the code below is in index.php
+
   // Find the new rank, show the number of players
 	$request_vars["rank"] = num_of_players ($db) + 1;
 
 	// New player has been inserted/added
   echo json_encode(insert_player($db, $request_vars));
-
-  * ------------------------------------------------------------------
-  */
 ?>

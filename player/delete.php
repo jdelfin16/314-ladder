@@ -1,5 +1,5 @@
 <?php
-  /*
+
   include "../database.php";
   include "../rest.php";
 
@@ -10,7 +10,7 @@
   $response = $request_vars;
   $response["service"] = "player";
   $response["method"] = $method;
-  */
+
 
   // Delete player
   function delete_player ($connection, $username)
@@ -29,8 +29,8 @@
 
     return $statement->rowCount () == 1;
   }
-  /*
+
   $test = $_GET['username'];
   echo json_encode(delete_player ($db, $test));
-  */
+  
 ?>
