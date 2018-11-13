@@ -12,8 +12,8 @@
 
   $response["service"] = "game";
   $response["method"] = $method;
-
   */
+
   //Get/Select game information
   function select_game ($connection, $username, $played)
   {
@@ -21,11 +21,11 @@
     $sql = "select * from game where (winner = :username or loser = :username)
       and played = :played;";
 
-     // If there is no 'played' input...
-     if (empty($played))
-     {
-       $sql = "select * from game where (winner = :username or loser = :username);";
-     }
+    // If there is no 'played' input...
+    if (empty($played))
+    {
+      $sql = "select * from game where (winner = :username or loser = :username);";
+    }
 
     // Set up query
     $statement = $connection->prepare($sql);
@@ -38,11 +38,13 @@
     {
       $game = $statement->fetchAll(PDO::FETCH_ASSOC);
     }
-    else {
+    else
+    {
       $game = [];
     }
     echo json_encode($game);
   }
 
   // select_game ($db, $request_vars["username"], $request_vars["played"]);
+  // echo "Test";
 ?>

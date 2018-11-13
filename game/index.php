@@ -1,74 +1,89 @@
 <?php
 
-        include "../database.php";
-      	include "../rest.php";
-      	include "insert.php";
-      	include "select.php";
-      	include "delete.php";
+  include "../database.php";
+	include "../rest.php";
+	include "insert.php";
+	include "select.php";
+	include "delete.php";
+  include "checking.php";
 
-        $request = new RestRequest();
-        $method = $request->getRequestType();
-        $request_vars = $request->getRequestVariables();
+  $request = new RestRequest();
+  $method = $request->getRequestType();
+  $request_vars = $request->getRequestVariables();
 
-        $response = $request_vars;
-        $response["service"] = "game";
-        $response["method"] = $method;
+  $response = $request_vars;
+  $response["service"] = "game";
+  $response["method"] = $method;
 
-        // D - Delete the Player
-      	if ($request->isDelete())
-      	{
-          echo "This is delete!";
-      	}
+  // Array for array_key_exists() function - based on methods
+  $GET_CHECK = array("username");
+  $POST_CHECK = array("winner", "loser", "played", "winner_score", "loser_score");
+  $DELETE_CHECK = array("winner", "loser", "played");
 
-      	// A - Add the player
-      	else if ($request->isPost())
-      	{
-          echo "This is post!";
-      	}
+  // Values for Get
+  $username = $response["username"];
 
-      	// V - View the Player
-      	else if ($request->isGet())
-      	{
-          echo "This is get!";
+  // Values for POST and DELETE
+  $winner = $response["winner"];
+  $loser = $response["loser"];
+  $played = $response["played"];
+  $number = $response["number"];
+  $winner_score= $response["winner_score"];
+  $loser_score= $response["loser_score"];
 
-      	}
+  // Counting number of parameters
+  $num_of_param = count($request_vars);
 
-        /*
-        ======== PSEUDOCODE!!! ====================
-        Create constants to check for:
-          - Username
-          - Winner
-          - Loser
-          - Date of Game played
-          - Winner's Score
-          - Loser's Score
+  // D - Delete the Player
+	if ($request->isDelete())
+	{
+    if (check_players($db, $winner, $loser) == true
+      && valid_keys($winner, $response, $DELETE_CHECK) == true
+      && valid_keys($loser, $response, $DELETE_CHECK) == true
+      && valid_keys($played, $response, $DELETE_CHECK) == true
+      && check_date($played) == true
+      && $num_of_param == 3)
+    {
+      delete_game($db, $winner, $loser, $played);
+    }
+    else
+    {
+      echo "ERROR: Unable to delete game!";
+    }
+	}
 
-        REMEMBER: Add try/catch in functions to catch PHP errors...
+	// A - Add the player
+	else if ($request->isPost())
+	{
+    if (check_players($db, $winner, $loser) == true
+      && valid_keys($winner, $response, $POST_CHECK) == true
+      && valid_keys($loser, $response, $POST_CHECK) == true
+      && valid_keys($played, $response, $POST_CHECK) == true
+      && valid_keys($winner_score, $response, $POST_CHECK) == true
+      && valid_keys($loser_score, $response, $POST_CHECK) == true
+      && check_date($played) == true
+      && $num_of_param == 5)
+    {
+      insert_game($db, $winner, $loser, $played, $winner_score, $loser_score);
+    }
+    else
+    {
+      echo "ERROR: Unable to insert game!";
+    }
+	}
 
-        Create global variables/arrays for the functions:
-          - Create --> [Winner, Loser, played, Winner's Score, Loser's Score]
-          - Delete --> [Winner, Loser, played]
-          - Select --> [Username, played]
+	// V - View the Player
+	else if ($request->isGet())
+	{
+    if (valid_keys($username, $response, $GET_CHECK) == true
+      && ($num_of_param == 1 || $num_of_param == 2))
+    {
+      select_game ($db, $username, $played);
+    }
+    else
+    {
+      echo "ERROR: Unable to select game!";
+    }
+	}
 
-        Receive inputs from the user...
-        === Q: What does this look like? ===
-        ===   $_POST? $_GET? $_DELETE?   ===
-        === Check the $response variable  ===
-
-        === For if-elseif statements: ===
-        - Need to understand rest.php functions...
-
-        If the user wants to create a new game:
-          Check for missing errors by comparing the inputs and Create
-          Run the insert function
-
-        Else, if the user wants to select a game:
-          Check for missing errors by comparing the inputs and Select
-          Run the select function
-
-        Else, if the user wants to delete a game:
-          Check for missing errors by comparing the inputs and Delete
-          Run the delete function
-
-        */
 ?>
