@@ -1,5 +1,4 @@
 <?php
-
   include "../database.php";
 	include "../rest.php";
 	include "insert.php";

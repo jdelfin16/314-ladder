@@ -1,18 +1,4 @@
 <?php
-  /*
-  include "../database.php";
-  include "../rest.php";
-
-  $request = new RestRequest();
-  $method = $request->getRequestType();
-  $request_vars = $request->getRequestVariables();
-
-  $response = $request_vars;
-
-
-  $response["service"] = "game";
-  $response["method"] = $method;
-  */
 
   //Get/Select game information
   function select_game ($connection, $username, $played)
@@ -42,9 +28,8 @@
     {
       $game = [];
     }
+    echo "Game selected: <br />";
     echo json_encode($game);
   }
 
-  // select_game ($db, $request_vars["username"], $request_vars["played"]);
-  // echo "Test";
 ?>

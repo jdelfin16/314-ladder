@@ -1,21 +1,5 @@
 <?php
-  /*
-  include "../database.php";
-  include "../rest.php";
 
-  $request = new RestRequest();
-  $method = $request->getRequestType();
-  $request_vars = $request->getRequestVariables();
-
-  $response = $request_vars;
-  $response["service"] = "game";
-  $response["method"] = $method;
-
-  // Assigning variables in array to parameters
-  $winner = $response["winner"];
-  $loser = $response["loser"];
-  $played = $response["played"];
-  */
   // Delete player
   function delete_game ($connection, $winner, $loser, $played)
   {
@@ -36,11 +20,19 @@
 
     // Return / display results
     $result = $statement->rowCount ();
-    echo "Game deleted! <br />";
+    if ($result == 0)
+    {
+      echo "No game has been deleted! <br />";
+    }
+    else if ($result > 1)
+    {
+      echo "Games deleted! <br />";
+    }
+    else
+    {
+      echo "Game deleted! <br />";
+    }
     echo json_encode($result);
   }
 
-  // Testing:
-  // print_r($delete_array);
-  // delete_game($db, $winner, $loser, $played);
 ?>

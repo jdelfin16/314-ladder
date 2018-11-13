@@ -1,30 +1,4 @@
 <?php
-  /*
-  include "../database.php";
-  include "../rest.php";
-
-  $request = new RestRequest();
-  $method = $request->getRequestType();
-  $request_vars = $request->getRequestVariables();
-
-  $response = $request_vars;
-  $response["service"] = "game";
-  $response["method"] = $method;
-
-  // Arrays full of keys;  for in_array() function - based on methods
-  $GET_CHECK = array("username");
-  $DELETE_CHECK = array("winner", "loser", "played", "number", "winner_score", "loser_score");
-  $POST_CHECK = array("winner", "loser", "played");
-
-  // Values for POST and DELETE
-  $winner = $response["winner"];
-  $loser = $response["loser"];
-  $played = $response["played"];
-  $number = $response["number"];
-  $winner_score= $response["winner_score"];
-  $loser_score= $response["loser_score"];
-  */
-  // ======================== Functions  ===================================
 
   // Validating keys - using $response value, $response array, and constant arrays set prior
   function valid_keys($value, $response_array, $constant_array)
@@ -70,7 +44,6 @@
       return false;
     }
   }
-  // echo json_encode(check_date($played));
 
   // Function for verifying the winner and loser
   function check_players ($connection, $winner, $loser)
@@ -103,25 +76,18 @@
     {
       $game_loser = [];
     }
-    /*
-    echo json_encode($game_winner);
-    echo "<br />";
-    echo json_encode($game_loser);
-    */
 
     // Check if the $winner and $loser exist
-    if (in_array($winner, $game_winner) && in_array($loser, $game_loser))
+    if (in_array($winner, $game_winner) && in_array($loser, $game_loser) && $winner != $loser)
     {
-      // echo ("$winner exists! <br />");
       return true;
     }
     else
     {
-      // echo ("$winner does not exist! <br />");
       return false;
     }
   }
-  // echo json_encode(check_players ($db, $winner, $loser));
+
 
   // Function for the number parameter (FOR INSERT!!!)
   function number_parameter($connection, $winner, $loser)
@@ -144,15 +110,11 @@
       $statement->execute();
       $curr_number = $statement->rowCount();
 
-      // echo "$curr_number <br />";
-
       // Increment current count of number
       $new_number = $curr_number + 1;
-      // echo "$new_number <br />";
 
       return $new_number;
     }
   }
 
-  // echo json_encode(number_parameter($db, $winner, $loser));
 ?>
