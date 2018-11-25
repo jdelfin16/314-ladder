@@ -28,7 +28,6 @@
     {
       $game = [];
     }
-    echo "Game selected: <br />";
     echo json_encode($game);
   }
 

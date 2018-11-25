@@ -19,19 +19,7 @@
     $statement->execute ();
 
     // Return / display results
-    $result = $statement->rowCount ();
-    if ($result == 0)
-    {
-      echo "No game has been deleted! <br />";
-    }
-    else if ($result > 1)
-    {
-      echo "Games deleted! <br />";
-    }
-    else
-    {
-      echo "Game deleted! <br />";
-    }
+    $result = $statement->rowCount () == 1;
     echo json_encode($result);
   }
 

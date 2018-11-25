@@ -6,14 +6,6 @@
     // Enter the parameter and acquire the key - FALSE if empty
     if (empty($value))
     {
-      $fail_key = array_search($value, $response_array);
-      if (empty($fail_key))
-      {
-        echo "ERROR: missing value! <br />";
-      }
-      else {
-        echo "ERROR: $fail_key is missing! <br />";
-      }
       return false;
     }
     else
@@ -40,7 +32,6 @@
     }
     else
     {
-      echo "ERROR: invalid date (<u>must be ISO 8601 format</u>)! <br />";
       return false;
     }
   }
@@ -49,36 +40,25 @@
   function check_players ($connection, $winner, $loser)
   {
     // Querys
-    $sql_winner = "select distinct winner from game;";
-    $sql_loser = "select distinct loser from game;";
+    $sql = "select distinct username from player;";
 
     // Set up query
-    $statement_winner = $connection->prepare($sql_winner);
-    $statement_loser = $connection->prepare($sql_loser);
+    $statement = $connection->prepare($sql);
 
     // Run the query - fetching the columns
-    $statement_winner->execute();
-    if ($statement_winner->rowCount() > 0)
+    $statement->execute();
+    if ($statement->rowCount() > 0)
     {
-      $game_winner = $statement_winner->fetchAll(PDO::FETCH_COLUMN);
+      $players = $statement->fetchAll(PDO::FETCH_COLUMN);
     }
     else
     {
-      $game_winner = [];
-    }
-
-    $statement_loser->execute();
-    if ($statement_loser->rowCount() > 0)
-    {
-      $game_loser = $statement_loser->fetchAll(PDO::FETCH_COLUMN);
-    }
-    else
-    {
-      $game_loser = [];
+      $players = [];
     }
 
     // Check if the $winner and $loser exist
-    if (in_array($winner, $game_winner) && in_array($loser, $game_loser) && $winner != $loser)
+    if (in_array($winner, $players) && in_array($loser, $players)
+      && $winner != $loser)
     {
       return true;
     }
@@ -100,7 +80,8 @@
     else
     {
       // Select ALL of the games involving the valid players
-      $sql = "select played from game where (winner = :winner and loser = :loser) or (winner = :loser and loser = :winner);";
+      $sql = "select played from game where (winner = :winner and loser = :loser)
+        or (winner = :loser and loser = :winner);";
 
       $statement = $connection->prepare($sql);
       $statement->bindParam(':winner', $winner);

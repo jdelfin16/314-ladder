@@ -8,7 +8,8 @@
     // Quit if $number parameter is false
     if ($number == false)
     {
-      echo json_encode("ERROR: INVALID PLAYERS!");
+      $fail = false;
+      echo json_encode($fail);
     }
     else
     {
@@ -29,15 +30,8 @@
       $statement->bindParam(':loser_score', $loser_score);
 
       $statement->execute ();
-      $result = $statement->rowCount ();
-      if ($result == 0)
-      {
-        echo "No game has been added! <br />";
-      }
-      else
-      {
-        echo "Game added! <br />";
-      }
+      $result = $statement->rowCount () == 1;
+
       echo json_encode($result);
     }
   }
