@@ -29,12 +29,13 @@
     An alternative challenge read operation, if the "challenger" parameter
     is given, return players available for that player to challenge.
     The "challenger" field should contain a username.
-      - Return if the selected challenger has available parameter
+      - Return challengees that the given challenger can challenge
   */
   function select_challenger($connection, $challenger)
   {
-    $sql = "select * from challenge where challenger = :challenger
-      and accepted is not null;";
+    $sql = "select name, email, rank, phone, username from player where
+    ((select rank from player where username = :challenger) > rank)
+    and ((select rank from player where username = :challenger) - rank <= 3);";
 
     // Set up query
     $statement = $connection->prepare($sql);
