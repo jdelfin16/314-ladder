@@ -28,7 +28,7 @@
   $accepted = $response["accepted"];
   */
   // Validating keys - using $response value, $response array, and constant arrays set prior
-  // Checking if the key is in the given parameters
+    // Checking if the key is in the given parameters
   function valid_keys($value, $response_array, $constant_array)
   {
     // Enter the parameter and acquire the key - FALSE if empty
@@ -49,9 +49,8 @@
       }
     }
   }
-  // echo json_encode(valid_keys($player, $response, $GET_CHECK_ONE));
 
-  // Function checking the scheduled and accepted dates (ISO 8601 Format w/ and w/o time); returns boolean
+  // Function checking the format of scheduled and accepted dates (ISO 8601 Format w/ and w/o time); returns boolean
   function verify_date($date_time)
   {
     if (json_encode(preg_match('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
@@ -65,9 +64,10 @@
     }
   }
 
-  // Function checking if the date accepted is appropriate (i.e., it is a date after issued)
-  function verify_accepted($connection, $date_time, $challenger, $challengee)
+  // For UPDATE - Function checking if the accepted and scheduled dates are appropriate (i.e., thery're set after issued date)
+  function verify_issued($connection, $date_time, $challenger, $challengee)
   {
+    // Acquire the accepted / scheduled date as time
     $date_accepted = strtotime($date_time);
 
     // Query for issued
@@ -82,32 +82,43 @@
     $statement->execute();
     if ($statement->rowCount() > 0)
     {
-      $challenge_two = $statement->fetchAll(PDO::FETCH_ASSOC);
+      $challenge_two = $statement->fetch(PDO::FETCH_NAMED);
     }
     else
     {
       $challenge_two = [];
     }
 
-    $date_issued = strtotime($challenge_two[0]["issued"]);
+    $date_issued = strtotime($challenge_two["issued"]);
 
-    if ($date_issued > $date_accepted) // If the issued date is before the accepted date...
+    if ($date_issued > $date_accepted) // If the issued date is before the accepted/scheduled date...
     {
-      return false; // The accepted date would be past the issued date --> INVALID
+      return false; // The accepted/scheduled date would be past the issued date --> INVALID
     }
     else
     {
-      return true; // The accepted date would be before the issued date --> VALID
+      return true; // The accepted/scheduled date would be before the issued date --> VALID
     }
   }
 
-  // echo json_encode(verify_accepted($db, $accepted, $challenger, $challengee));
+  // For INSERT - Function checking if the scheduled date is appropriate (i.e., it is set after issued)
+  function verify_scheduled($date_time)
+  {
+    // Acquiring scheduled date as time
+    $date_scheduled = strtotime($date_time);
 
-  /*
-  echo json_encode(verify_date($accepted));
-  echo "<br />";
-  echo json_encode(verify_date($scheduled));
-  */
+    // Acquiring today's date as time
+    $date_issued = strtotime(date("Y-m-d"));
+
+    if ($date_issued > $date_scheduled) // If the issued date is before to the scheduled date...
+    {
+      return false; // The scheduled date would be past the issued date --> INVALID
+    }
+    else
+    {
+      return true; // The scheduled date would be before the issued date --> VALID
+    }
+  }
 
   // Function for verifying the player, challenger, or challengee based on the player table
   function check_player ($connection, $player)
@@ -139,11 +150,6 @@
       return false;
     }
   }
-  /*
-  echo json_encode(check_player($db, $player));
-  echo json_encode(check_player($db, $challenger));
-  echo json_encode(check_player($db, $challengee));
-  */
 
   // Function checking if the challenger and challengee are the same player
   function validate_players($challenger, $challengee)
@@ -200,24 +206,23 @@
       return false;
     }
   }
-  // echo json_encode(verify_parameters($method, $request_vars));
 
   /*
   * BASED ON ASSIGNMENT 3 - Creating query that will be used to validate INSERT
   * What is the function: Essentially a SELECT query...
     * See the rules on the Environment page...
   * Returns boolean
-    * If true = challenge exists --> DO NOT INSERT (challenge already exists)
-    * If false = challenge does not exist --> INSERT
+    * If true = challenge does not exist --> INSERT
+    * If false = challenge does exist --> DO NOT INSERT
   */
   function validate_insert($connection, $challenger, $challengee)
   {
     $sql = "select cha.username as challenger, target.username as challengee,
-      cha.rank as challenger_rank, target.rank as challengee_rank from player
-      as cha, player as target, challenge where (cha.rank - target.rank <= 3)
-      and (cha.rank > target.rank) and ((cha.username = challenge.challenger
-      and target.username = challenge.challengee) and challenge.accepted is
-      not null) and (cha.username = :challenger and target.username = :challengee);";
+      cha.rank as challenger_rank, target.rank as challengee_rank
+      from player as cha, player as target where (cha.rank - target.rank <= 3)
+      and (cha.rank > target.rank) and not exists
+      (select * from challenge where challenger = :challenger
+      and challengee = :challengee);";
 
     $statement = $connection->prepare($sql);
 
@@ -228,17 +233,125 @@
     $statement->execute ();
     $result = $statement->rowCount ();
 
-    // echo json_encode($result);
-    if ($result == 1)
+    if ($result > 1)
     {
-      return false; // If there already exists a challenge with both players, DO NOT INSERT!
+      return true; // If the rules are fulfilled - INSERT!
     }
     else
     {
-      return true; // If there does not exist a challenge with both players, INSERT!
+      return false; // If the rules are NOT fulfilled - DO NOT INSERT!
     }
   }
 
-  // validate_insert($db, $challenger, $challengee);
-  // echo json_encode(empty($response["accepted"]));
+  // For INSERT - function validating the ranks of the challenger and challengee
+    // Following similar format to validate_insert()...
+  function validate_ranks($connection, $challenger, $challengee)
+  {
+    $sql_challenger = "select rank from player where username = :challenger;";
+    $sql_challengee = "select rank from player where username = :challengee;";
+
+    $statement_challenger = $connection->prepare($sql_challenger);
+    $statement_challengee = $connection->prepare($sql_challengee);
+
+    $statement_challenger->bindParam(':challenger', $challenger);
+    $statement_challengee->bindParam(':challengee', $challengee);
+
+    $statement_challenger->execute();
+    $statement_challengee->execute();
+
+    if ($statement_challenger->rowCount() == 1)
+    {
+      $challenger_rank = $statement_challenger->fetch(PDO::FETCH_NAMED);
+    }
+    else
+    {
+      $challenger_rank = [];
+    }
+
+    if ($statement_challengee->rowCount() == 1)
+    {
+      $challengee_rank = $statement_challengee->fetch(PDO::FETCH_NAMED);
+    }
+    else
+    {
+      $challengee_rank = [];
+    }
+
+    $test1 = $challenger_rank["rank"];
+    $test2 = $challengee_rank["rank"];
+
+    if (($challenger_rank["rank"] - $challengee_rank["rank"] <= 3)
+      && ($challenger_rank["rank"] > $challengee_rank["rank"]))
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  // For UPDATE - validate if challenge exist
+  function validate_contenders($connection, $challenger, $challengee)
+  {
+    // Querys
+    $sql = "select challenger, challengee from challenge where challenger = :challenger and challengee = :challengee;";
+
+    // Set up query
+    $statement = $connection->prepare($sql);
+
+    // Binding parameters
+    $statement->bindParam(':challenger', $challenger);
+    $statement->bindParam(':challengee', $challengee);
+
+    // Run the query - fetching the columns
+    $statement->execute();
+    if ($statement->rowCount() > 0)
+    {
+      $valid_challenge = $statement->fetch(PDO::FETCH_NAMED);
+    }
+    else
+    {
+      $valid_challenge = [];
+    }
+
+    // If the players are valid challengers and challengees...
+      // If the challenge is valid...
+    if (in_array($challenger, $valid_challenge) && in_array($challengee, $valid_challenge))
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  // For SELECT - validate if the challenger exists
+  function validate_challenger($connection, $challenger)
+  {
+    $sql = "select distinct challenger from challenge;";
+
+    $statement = $connection->prepare($sql);
+
+    $statement->execute();
+    if ($statement->rowCount() > 0)
+    {
+      $list_challengers = $statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+    else
+    {
+      $list_challengers = [];
+    }
+
+    // If the challenger is in challenge...
+    if (in_array($challenger, $list_challengers))
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
 ?>

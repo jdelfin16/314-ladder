@@ -1,19 +1,4 @@
 <?php
-  /*
-  include "../database.php";
-	include "../rest.php";
-
-  $request = new RestRequest();
-  $method = $request->getRequestType();
-  $request_vars = $request->getRequestVariables();
-
-  $response = $request_vars;
-  $response["service"] = "challenge";
-  $response["method"] = $method;
-
-  $player = $response["player"];
-  $challenger = $response["challenger"];
-  */
 
   /*
     Returns a challenge if the player is involved as either the
@@ -39,8 +24,6 @@
     }
     echo json_encode($challenge_one);
   }
-
-  // select_player($db, $player);
 
   /*
     An alternative challenge read operation, if the "challenger" parameter
@@ -70,5 +53,4 @@
     echo json_encode($challenge_two);
   }
 
-  // select_challenger($db, $challenger);
 ?>

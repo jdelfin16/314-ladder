@@ -62,7 +62,8 @@
       && validate_players($challenger, $challengee) == true
       && verify_date($scheduled) == true
       && validate_insert($db, $challenger, $challengee) == true
-      && validate_players($challenger, $challengee) == true)
+      && verify_scheduled($scheduled) == true
+      && validate_ranks($db, $challenger, $challengee) == true)
     {
       insert_challenge($db, $challenger, $challengee, $scheduled);
     }
@@ -85,7 +86,8 @@
 
     else if (verify_parameters($method, $request_vars) == true
       && valid_keys($challenger, $response, $GET_CHECK_TWO) == true
-      && check_player($db, $challenger) == true)
+      && check_player($db, $challenger) == true
+      && validate_challenger($db, $challenger) == true)
     {
       select_challenger($db, $challenger);
     }
@@ -109,7 +111,9 @@
       && validate_players($challenger, $challengee) == true
       && verify_date($scheduled) == true
       && verify_date($accepted) == true
-      && verify_accepted($db, $accepted, $challenger, $challengee) == true)
+      && verify_issued($db, $accepted, $challenger, $challengee) == true
+      && verify_issued($db, $scheduled, $challenger, $challengee) == true
+      && validate_contenders($db, $challenger, $challengee) == true)
     {
       update_challenge($db, $challenger, $challengee, $scheduled, $accepted);
     }
