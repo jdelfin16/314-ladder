@@ -1,5 +1,4 @@
 <?php
-
   include "../database.php";
   include "../rest.php";
 
@@ -8,32 +7,46 @@
   $request_vars = $request->getRequestVariables();
 
   $response = $request_vars;
-  //$response["service"] = "player";
-  //$response["method"] = $method;
+  $response["service"] = "player";
+  $response["method"] = $method;
 
+  // Arrays for valid_keys() function - based on methods
+  $UPDATE_CHECK = array("username", "name", "email", "rank", "phone");
 
-  // Put/Update player information
-  function update_player ($connection, $player_data)
+  // Values
+  $name = $response["name"];
+  $email = $response["email"];
+  $phone = $response["phone"];
+  $username = $response["username"];
+  $rank = $response["rank"];
+
+  /*
+    Updates the player with the given parameters. All the players between the
+    old and new rank need to be shifted either up or down depending on the change.
+      - Hint: username is the only unupdatable parameter?
+  */
+  function update_player($connection, $username, $name, $email, $rank, $phone)
   {
-    //echo "update_player check!";
-    $sql = "update player set name = :name, username = :username,
-      password = :password, email = :email, phone = :phone,
-        where username = :username;";
+    $sql = "update player set name = :name, email = :email, rank = :rank,
+      phone = :phone where username = :username;";
 
-    // $player_data = data for $rank
+    // Create if-statements if there are empty parameters?
+      // ...if there is nothing to update?
+      // TESTED: if the parameter is empty, the player will be updated with null...
 
-    $statement = $connection->prepare ($sql);
+    $statement = $connection->prepare($sql);
 
-    $name = ;
-    $newUsername = ;
-    $password = ;
-    $email = ;
-    $phone = ;
-    $oldUsername = ;
+    // Binding parameters
+    $statement->bindParam(':username', $username);
+    $statement->bindParam(':name', $name);
+    $statement->bindParam(':email', $email);
+    $statement->bindParam(':rank', $rank);
+    $statement->bindParam(':phone', $phone);
 
-    $statement->execute ($player_data);
-    return $statement->rowCount () == 1;
+    $statement->execute ();
+    $result = $statement->rowCount () == 1;
+
+    echo json_encode($result);
+    }
   }
-  update_player();
-
 ?>

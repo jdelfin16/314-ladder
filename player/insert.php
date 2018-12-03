@@ -1,51 +1,39 @@
 <?php
-
-  include "../database.php";
-  include "../rest.php";
-
-  $request = new RestRequest();
-	$method = $request->getRequestType();
-	$request_vars = $request->getRequestVariables();
-
-  $response = $request_vars;
-  $response["service"] = "player";
-  $response["method"] = $method;
-
-
-  // Return the number of players in the database
-	function num_of_players ($connection)
-	{
-		$sql = "select * from player;";
-		$statement = $connection->prepare($sql);
-		$statement->execute();
-		return $statement->rowCount();
-	}
-
-  function insert_player ($connection, $player_data)
+  /*
+    Create a new player. The player's rank should be automatically be
+    assigned the highest value not yet taken.
+      - Based on the number of players...
+  */
+  function insert_player($connection, $name, $email, $phone, $username, $password)
   {
-    // $player_data represents the rank data
-    $sql = "insert into player (name, username, rank, email, phone, password)
-			values (:name, :username, :rank, :email, :phone, :password);";
-		$statement = $connection->prepare ($sql);
+    // Acquires the number of players in the database
+    $sql_select = "select * from player;";
+    $statement_select = $connection->prepare($sql_select);
+    $statement_select->execute();
+    $result_select = $statement_select->rowCount();
 
-    $name = $_POST["name"];
-    $username = $_POST["username"];
-    $rank = $player_data;
-    $email = $_POST["email"];
-    $phone = $_POST["phone"];
-    $password = $_POST["password"];
+    // Create rank parameter for inserting...
+    $player_rank = $result_select + 1;
 
-    $statement->bindParam('ssisis', $name, $username, $rank,
-     $email, $phone, $password);
+    // Create SQL
+    $sql = "insert into player (name, email, rank, phone, username, password)
+      values (:name, :email, :rank, :phone, :username, :password);";
 
-    $statement->execute ($player_data);
-		return $statement->rowCount () == 1;
+    // Preparing query
+    $statement = $connection->prepare($sql);
+
+    // Binding parameters
+    $statement->bindParam(':name', $name);
+    $statement->bindParam(':email', $email);
+    $statement->bindParam(':rank', $player_rank);
+    $statement->bindParam(':phone', $phone);
+    $statement->bindParam(':username', $username);
+    $statement->bindParam(':password', $password);
+
+    $statement->execute ();
+    $result = $statement->rowCount() == 1;
+
+    echo json_encode($result);
+    // echo json_encode(intval($player_rank));
   }
-  // Note: the code below is in index.php
-
-  // Find the new rank, show the number of players
-	$request_vars["rank"] = num_of_players ($db) + 1;
-
-	// New player has been inserted/added
-  echo json_encode(insert_player($db, $request_vars));
 ?>

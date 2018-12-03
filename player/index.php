@@ -1,23 +1,11 @@
 <?php
-
 	include "../database.php";
 	include "../rest.php";
 	include "insert.php";
 	include "select.php";
+	include "update.php";
 	include "delete.php";
-	//include "update.php" --> INCOMPLETE...;
-
-	// Constants to check for:
-	$USER = "username";
-	$NAME = "name";
-	$PASS = "password";
-	$PHONE = "phone";
-	$EMAIL = "email";
-	$RANK = "rank";
-
-	$USERNAME = [$USER];
-	$ALL = [$USER, $NAME, $PASS, $PHONE, $EMAIL];
-	//$UPDATE = [$USER, $NAME, $PHONE, $EMAIL];
+	include "lib.php";
 
 	$request = new RestRequest();
 	$method = $request->getRequestType();
@@ -27,58 +15,41 @@
 	$response["service"] = "player";
 	$response["method"] = $method;
 
-	// Return the number of players in the database
-	function num_of_players ($connection)
-	{
-		$sql = "select * from player;";
-		$statement = $connection->prepare($sql);
-		$statement->execute();
-		return $statement->rowCount();
-	}
+	// Arrays for valid_keys() function - based on methods
+	$POST_CHECK = array("name", "email", "phone", "username", "password");
+	$GET_CHECK = array("username");
+	$UPDATE_CHECK = array("username", "name", "email", "rank", "phone");
+	$DELETE_CHECK = array("username");
+
+	// Values
+	$name = $response["name"];
+	$email = $response["email"];
+	$phone = $response["phone"];
+	$username = $response["username"];
+	$password = $response["password"];
+	$rank = $response["rank"];
 
 	// D - Delete the Player
 	if ($request->isDelete())
 	{
-		/* Create a function that checks for errors
-		* (ex. missing parameters)
-		*/
-		//missing_error($request_vars, $USERNAME);
-
-		// Proceed to deleting the player
-		// Note: this JSON returns boolean...
-		echo json_encode(delete_player ($db, $request_vars[$USER]));
 
 	}
 
 	// A - Add the player
 	else if ($request->isPost())
 	{
-		/* Create a function that checks for errors
-		* (ex. missing parameters, proper email and phone number formats,
-		* repeated player information)
-		*/
-		//missing_error($request_vars, $ALL);
 
-		// Proceed to adding the new player
-		$request_vars[$RANK] = num_of_players ($db) + 1;
-		// Note: this JSON returns boolean...
-		echo json_encode(insert_player($db, $request_vars[$RANK]));
 	}
 
 	// V - View the Player
 	else if ($request->isGet())
 	{
-		/* Create a function that checks for errors
-		* (ex. missing username)
-		*/
-		//missing_error($request_vars, $USERNAME);
 
-		echo json_encode(select_player ($db, $request_vars[$USER]));
 	}
-	/* E - Edit the Player
+
+	//E - Edit the Player
 	else if ($request->isPut())
 	{
 
 	}
-	*/
 ?>

@@ -1,66 +1,119 @@
 <?php
-  // Checks for minor errors for each function
+  include "../database.php";
+  include "../rest.php";
 
-  /*$USER = "username";
-  $NAME = "name";
-  $PASS = "password";
-  $PHONE = "phone";
-  $EMAIL = "email";
-  $RANK = "rank";
+  $request = new RestRequest();
+  $method = $request->getRequestType();
+  $request_vars = $request->getRequestVariables();
 
-  $USERNAME = [$USER];
-  $ALL = [$USER, $NAME, $PASS, $PHONE, $EMAIL];
-  */
-  function missing_error($vars, $array)
+  $response = $request_vars;
+  $response["service"] = "player";
+  $response["method"] = $method;
+
+  // Arrays for valid_keys() function - based on methods
+  $POST_CHECK = array("name", "email", "phone", "username", "password");
+  $GET_CHECK = array("username");
+  $UPDATE_CHECK = array("username", "name", "email", "rank", "phone");
+  $DELETE_CHECK = array("username");
+
+  // Values
+  $name = $response["name"];
+  $email = $response["email"];
+  $phone = $response["phone"];
+  $username = $response["username"];
+  $password = $response["password"];
+  $rank = $response["rank"];
+
+  // Function validating the phone number
+  function validate_phone($phone)
   {
-    // If there are no variables (i.e., if $vars is empty)...
-    // then provide a warning...
-    if (!$vars)
+    if (preg_match('/^[0-9]{3}[0-9]{3}[0-9]{4}$/',$phone, $matches) == 1)
     {
-      echo "PLEASE enter some data!";
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+  // echo json_encode(validate_phone($phone));
+
+  // Function validating the email
+  function validate_email($email)
+  {
+    if (filter_var($email, FILTER_VALIDATE_EMAIL))
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  // Validating keys - using $response value, $response array, and constant arrays set prior
+    // Checking if the key is in the given parameters
+  function valid_keys($value, $response_array, $constant_array)
+  {
+    // Enter the parameter and acquire the key - FALSE if empty
+    if (empty($value))
+    {
+      return false;
+    }
+    else
+    {
+      $key = array_search($value, $response_array);
+      if (in_array($key, $constant_array))
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+  }
+
+  /*
+    Function counting the number of parameters needed for specific methods
+    - CREATE needs 5 parameters
+    - GET and DELETE needs 1 parameter
+    - UPDATE needs 4 parameters
+  */
+  function verify_parameters($method, $response_array)
+  {
+
+    // Counting number of parameters
+    $num_of_param = count($response_array);
+
+    // If the method is for INSERT...
+    if ($method == "POST" && $num_of_param == 5)
+    {
+      return true;
     }
 
-    // If the variable is in the array...
-    if (in_array($vars, $array))
+    // Else, if the method is for SELECT...
+    else if ($method == "GET" && $num_of_param == 1)
     {
-      echo "All set!";
-    }
-    else
-    {
-      echo "$vars is missing...";
+      return true;
     }
 
-    // If the variable is a username and is not in the array...
-    // then provide a warning...
-    if ($vars = $USER && in_array($vars, $array))
+    // Else, if the method is for UPDATE...
+    else if ($method == "PUT" && $num_of_param == 4)
     {
-      echo "$vars exists!";
-    }
-    else
-    {
-      echo "ERROR - you are missing $vars";
-    }
-    // If the variable is an email, is in the array, and
-    // does include an '@' symbol...
-    if ($vars = $EMAIL && in_array($vars, $array) && preg_match('/@/', $vars))
-    {
-      echo "$vars is a valid email!";
-    }
-    else
-    {
-      echo "$vars is an invalid email!";
+      return true;
     }
 
-    // If the variable is a phone number,
-    // is an the array, and is 10 digits long...
-    if ($vars = $PHONE && in_array($vars, $array) &&
-     preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $vars))
+    // Else, if the method is for DELETE...
+    else if ($method == "DELETE" && $num_of_param == 1)
     {
-      echo "$vars is a valid phone number!";
+      return true;
     }
+
+    // Else...
     else
     {
-      echo "$vars is not a valid phone number!";
+      return false;
     }
   }
 

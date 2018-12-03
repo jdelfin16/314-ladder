@@ -1,43 +1,23 @@
 <?php
-  /*
-  include "../database.php";
-  include "../rest.php";
-
-  $request = new RestRequest();
-  $method = $request->getRequestType();
-  $request_vars = $request->getRequestVariables();
-
-  $response = $request_vars;
-  */
-
-  //$response["service"] = "player";
-  //$response["method"] = $method;
-
-
-  //Get/Select player information
-  function select_player ($connection, $username)
+  // Function selecting the player by the username
+  function select_player($connection, $username)
   {
-    // Query
-    $sql = "select username, name, phone, email, rank from player
-     where username = ?;";
+    $sql = "select name, email, rank, phone, username from player where username = :username;";
 
-    // Set up query
     $statement = $connection->prepare($sql);
 
-    // Run the query
-    $statement->execute ([$username]);
-    if ($statement->rowCount() > 0)
+    $statement->bindParam(":username", $username);
+
+    $statement->execute();
+
+    if ($statement->rowCount() == 1)
     {
-      $player = $statement->fetch(PDO::FETCH_ASSOC);
+      $player = $statement->fetchAll(PDO::FETCH_ASSOC);
     }
-    else {
+    else
+    {
       $player = [];
     }
-    return $player;
+    echo json_encode($player);
   }
-  /*
-  $success = select_player ($db, $test);
-
-  echo json_encode(select_player ($db, $request_vars["username"]));
-  */
 ?>

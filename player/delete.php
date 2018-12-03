@@ -1,36 +1,16 @@
 <?php
-
-  include "../database.php";
-  include "../rest.php";
-
-  $request = new RestRequest();
-  $method = $request->getRequestType();
-  $request_vars = $request->getRequestVariables();
-
-  $response = $request_vars;
-  $response["service"] = "player";
-  $response["method"] = $method;
-
-
-  // Delete player
-  function delete_player ($connection, $username)
+  function delete_player($connection, $username)
   {
-    //echo "delete_player check!";
-    $sql = "delete from player where username = ?;";
+    $sql = "delete from player where username = :username;";
 
-    // Set up query
     $statement = $connection->prepare($sql);
 
-    // Run the query
-    $statement->execute ([$username]);
+    $statement->bindParam(':username', $username);
 
-    // Confirmation of deletion
-    //echo "$username is deleted! <br>";
+    $statement->execute();
 
-    return $statement->rowCount () == 1;
+    // Return / display results
+    $result = $statement->rowCount () == 1;
+    echo json_encode($result);
   }
-
-  $test = $_GET['username'];
-  echo json_encode(delete_player ($db, $test));
-  
 ?>
