@@ -1,6 +1,7 @@
 <?php
 
   // Validating keys - using $response value, $response array, and constant arrays set prior
+    // Checking if the key is in the given parameters
   function valid_keys($value, $response_array, $constant_array)
   {
     // Enter the parameter and acquire the key - FALSE if empty
@@ -25,7 +26,7 @@
   // Function returns boolean
   function check_date($date_time)
   {
-    if (json_encode(preg_match('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
+    if (json_encode(preg_match('/^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9]) (2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])$/',
       $date_time, $matches)) > 0)
     {
       return true;

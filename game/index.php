@@ -33,7 +33,7 @@
   // Counting number of parameters
   $num_of_param = count($request_vars);
 
-  // D - Delete the Player
+  // D - Delete the game
 	if ($request->isDelete())
 	{
     if (check_players($db, $winner, $loser) == true
@@ -51,7 +51,7 @@
     }
 	}
 
-	// A - Add the player
+	// A - Add the game
 	else if ($request->isPost())
 	{
     if (check_players($db, $winner, $loser) == true
@@ -71,7 +71,7 @@
     }
 	}
 
-	// V - View the Player
+	// V - View the gane
 	else if ($request->isGet())
 	{
     if (valid_keys($username, $response, $GET_CHECK) == true

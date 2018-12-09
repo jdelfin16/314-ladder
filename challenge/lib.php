@@ -1,10 +1,8 @@
 <?php
   // Library of extra functions
-  // for checking and specifically for CRRUD
   /*
   include "../database.php";
-	include "../rest.php";
-
+  include "../rest.php";
   $request = new RestRequest();
   $method = $request->getRequestType();
   $request_vars = $request->getRequestVariables();
@@ -20,13 +18,13 @@
   $UPDATE_CHECK = array("challenger", "challengee", "scheduled", "accepted");
   $DELETE_CHECK = array("challenger", "challengee", "scheduled");
 
-  // Constants
+  // Values
   $player = $response["player"];
   $challenger = $response["challenger"];
   $challengee = $response["challengee"];
   $scheduled = $response["scheduled"];
-  $accepted = $response["accepted"];
-  */
+  $accepted = $response["accepted"];*/
+  
   // Validating keys - using $response value, $response array, and constant arrays set prior
     // Checking if the key is in the given parameters
   function valid_keys($value, $response_array, $constant_array)
@@ -64,6 +62,7 @@
     }
   }
 
+
   // For UPDATE - Function checking if the accepted and scheduled dates are appropriate (i.e., thery're set after issued date)
   function verify_issued($connection, $date_time, $challenger, $challengee)
   {
@@ -93,7 +92,7 @@
 
     if ($date_issued > $date_accepted) // If the issued date is before the accepted/scheduled date...
     {
-      return false; // The accepted/scheduled date would be past the issued date --> INVALID
+      return false; // The accepted/scheduled date would be past the issued date --> INVALID    }
     }
     else
     {
@@ -233,7 +232,7 @@
     $statement->execute ();
     $result = $statement->rowCount ();
 
-    if ($result > 1)
+    if ($result > 0)
     {
       return true; // If the rules are fulfilled - INSERT!
     }
@@ -277,19 +276,19 @@
       $challengee_rank = [];
     }
 
-    $test1 = $challenger_rank["rank"];
-    $test2 = $challengee_rank["rank"];
-
-    if (($challenger_rank["rank"] - $challengee_rank["rank"] <= 3)
-      && ($challenger_rank["rank"] > $challengee_rank["rank"]))
+    if ($challenger_rank["rank"] - $challengee_rank["rank"] > 3 || $challenger_rank["rank"] <= $challengee_rank["rank"])
     {
-      return true;
+
+      return false;
     }
     else
     {
-      return false;
+
+      return true;
+
     }
   }
+  validate_ranks($db, $challenger, $challengee);
 
   // For UPDATE - validate if challenge exist
   function validate_contenders($connection, $challenger, $challengee)

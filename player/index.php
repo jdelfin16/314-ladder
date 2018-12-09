@@ -32,24 +32,77 @@
 	// D - Delete the Player
 	if ($request->isDelete())
 	{
+		if (verify_parameters($method, $request_vars) == true
+      && valid_keys($username, $response, $DELETE_CHECK) == true
+      && check_player($db, $username) == true)
+    {
+      delete_player($db, $username);
+    }
 
+    else
+    {
+      echo json_encode("Unable to delete the player!");
+    }
 	}
 
 	// A - Add the player
 	else if ($request->isPost())
 	{
+		if (verify_parameters($method, $request_vars) == true
+      && valid_keys($name, $response, $POST_CHECK) == true
+			&& valid_keys($email, $response, $POST_CHECK) == true
+			&& valid_keys($phone, $response, $POST_CHECK) == true
+			&& valid_keys($username, $response, $POST_CHECK) == true
+			&& valid_keys($password, $response, $POST_CHECK) == true
+			&& validate_phone($phone) == true
+			&& validate_email($email) == true
+      && check_current_player($db, $username) == true)
+    {
+      insert_player($db, $name, $email, $phone, $username, $password);
+    }
 
+    else
+    {
+      echo json_encode("Unable to insert the player!");
+    }
 	}
 
 	// V - View the Player
 	else if ($request->isGet())
 	{
+		if (verify_parameters($method, $request_vars) == true
+      && valid_keys($username, $response, $GET_CHECK) == true
+      && check_player($db, $username) == true)
+    {
+      select_player($db, $username);
+    }
 
+    else
+    {
+      echo json_encode("Unable to view the player!");
+    }
 	}
 
 	//E - Edit the Player
 	else if ($request->isPut())
 	{
+		if (verify_parameters($method, $request_vars) == true
+      && valid_keys($name, $response, $UPDATE_CHECK) == true
+			&& valid_keys($email, $response, $UPDATE_CHECK) == true
+			&& valid_keys($phone, $response, $UPDATE_CHECK) == true
+			&& valid_keys($username, $response, $UPDATE_CHECK) == true
+			&& valid_keys($rank, $response, $UPDATE_CHECK) == true
+			&& validate_phone($phone) == true
+			&& validate_email($email) == true
+      && check_player($db, $username) == true)
+    {
+			// REMEMBER: ORDER IS IMPORTANT!!!
+			update_player($db, $username, $name, $email, $rank, $phone);
+    }
 
+    else
+    {
+      echo json_encode("Unable to update the player!");
+    }
 	}
 ?>

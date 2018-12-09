@@ -3,6 +3,30 @@
   function insert_game ($connection, $winner, $loser, $played, $winner_score, $loser_score)
   {
     // Fill in $number parameter
+
+    /*
+    $verify_players = check_players($connection, $winner, $loser);
+    if ($verify_players == false)
+    {
+      return false;
+    }
+    else
+    {
+      // Select ALL of the games involving the valid players
+      $sql = "select played from game where (winner = :winner and loser = :loser)
+        or (winner = :loser and loser = :winner);";
+
+      $statement = $connection->prepare($sql);
+      $statement->bindParam(':winner', $winner);
+      $statement->bindParam(':loser', $loser);
+
+      // Return the number of games played
+      $statement->execute();
+      $curr_number = $statement->rowCount();
+
+      // Increment current count of number
+      $new_number = $curr_number + 1;
+    */
     $number = number_parameter($connection, $winner, $loser);
 
     // Quit if $number parameter is false

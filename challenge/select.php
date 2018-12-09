@@ -6,7 +6,7 @@
   */
   function select_player($connection, $player)
   {
-    $sql = "select * from challenge where challenger = :player or challengee = :player";
+    $sql = "select * from challenge where challenger = :player or challengee = :player;";
 
     // Set up query
     $statement = $connection->prepare($sql);

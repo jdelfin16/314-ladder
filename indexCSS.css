@@ -1,0 +1,468 @@
+/*
+html5doctor.com Reset Stylesheet
+v1.6.1
+Last Updated: 2010-09-17
+Author: Richard Clark - http://richclarkdesign.com
+Twitter: @rich_clark
+*/
+
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+body {
+    line-height:1;
+}
+
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section {
+    display:block;
+}
+
+nav ul {
+    list-style:none;
+}
+
+blockquote, q {
+    quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+
+a {
+    margin:0;
+    padding:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+/* change colours to suit your needs */
+ins {
+    background-color:#ff9;
+    color:#000;
+    text-decoration:none;
+}
+
+/* change colours to suit your needs */
+mark {
+    background-color:#ff9;
+    color:#000;
+    font-style:italic;
+    font-weight:bold;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+    border-bottom:1px dotted;
+    cursor:help;
+}
+
+/* change border colour to suit your needs */
+hr {
+    display:block;
+    height:1px;
+    border:0;
+    border-top:1px solid #cccccc;
+    margin:1em 0;
+    padding:0;
+}
+
+input, select {
+    vertical-align:middle;
+}
+
+/*==========================================================================*/
+
+.center { text-align: center; }
+
+.content {
+  max-width: 1200px;
+  margin: auto;
+  background: white;
+  padding: 10px;
+}
+
+body {
+  background-image: url(electricrain.gif);
+  background-size: 200%;
+  background-repeat: no-repeat;
+
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 800px;
+}
+
+.container .content {
+  bottom: 0;
+  background: rgb(51, 133, 255, 0.8);
+  color: #f1f1f1;
+  width: 2500px;
+  padding: 20px;
+}
+
+.main-wrapper {
+  margin: 0 auto;
+  width: 1000px;
+}
+
+a {
+  text-decoration: none;
+}
+
+header nav {
+  width: 100%;
+  height: 60px;
+  background: rgb(255, 255, 255, 0.8);
+}
+
+header nav ul {
+  float: left;
+}
+
+header nav ul li {
+  float: left;
+  margin-right: 20px;
+  list-style: none;
+}
+
+
+header nav ul li a {
+  font-family: arial;
+  font-size: 16px;
+  color: #111;
+  line-height: 63px;
+}
+
+
+header .nav-login {
+  float: right;
+}
+
+header .nav-login form {
+  float: left;
+  padding-top: 15px;
+}
+
+header .nav-login form input {
+  float: left;
+  width: 140px;
+  height: 30px;
+  padding: 0px 10px;
+  margin-right: 10px;
+  border: none;
+  background-color: #ccc;
+  font-family: arial;
+  font-size: 14px;
+  color: #111;
+  line-height: 30px;
+}
+
+header .nav-login form button {
+  float: left;
+  width: 60px;
+  height: 30px;
+  margin-right: 10px;
+  border: none;
+  background-color: #f3f3f3;
+  font-family: arial;
+  font-size: 14px;
+  color: #111;
+  cursor: pointer;
+}
+
+header .nav-login form button:hover {
+  background-color: #ccc;
+}
+
+header .nav-login a{
+  display: block;
+  width: 60px;
+  height: 60px;
+  border: none;
+  float: left;
+  border-color: #fff;
+  font-family: arial;
+  font-size: 16px;
+  color: #111;
+  line-height: 63px;
+  cursor: pointer;
+}
+
+/*===============================*/
+footer nav {
+  width: 100%;
+  height: 60px;
+  background: rgb(255, 255, 255, 0.8);
+}
+
+footer nav ul {
+  float: left;
+}
+
+footer nav ul li {
+  float: left;
+  margin-right: 20px;
+  list-style: none;
+}
+
+footer nav ul li a {
+  font-family: arial;
+  font-size: 16px;
+  color: #111;
+  line-height: 63px;
+}
+/*==============================*/
+
+.main-container {
+  padding-top: 20px;
+}
+
+h1 {
+  padding-top: 10px;
+  font-family: arial;
+  font-size: 40px;
+  color: #111;
+  line-height: 50px;
+  text-align: center;
+}
+
+.main-container h2 {
+  padding-top: 20px;
+  font-family: arial;
+  font-size: 36px;
+  color: #111;
+  line-height: 50px;
+  text-align: center;
+}
+
+.main-container h3 {
+  font-family: arial;
+  font-size: 30px;
+  color: #111;
+  line-height: 50px;
+  text-align: left;
+}
+
+.main-container h4 {
+  font-family: arial;
+  font-size: 12px;
+  color: #111;
+  text-align: center;
+}
+
+p {
+  font-family: arial;
+  padding-top: 10px;
+  font-size: 18px;
+  color: #111;
+  text-align: left;
+}
+
+ul, ul li {
+  font-family: arial;
+  font-size: 18px;
+  color: #111;
+  text-align: left;
+  list-style-position: inside;
+
+}
+
+ol, ol li {
+  font-family: arial;
+  font-size: 18px;
+  color: #111;
+  text-align: left;
+  list-style-position: inside;
+}
+
+/*==========================================================================*/
+
+.signup-form {
+  width: 400px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.signup-form input {
+  margin: 0 auto;
+  width: 100%;
+  height: 40px;
+  padding: 0px 5%;
+  border: none;
+  background-color: #fff;
+  font-family: arial;
+  font-size: 16px;
+  color: #111;
+  line-height: 40px;
+  margin-bottom: 4px;
+}
+
+.signup-form input[type="radio"]{
+  float: left;
+  width: 20px;
+  margin-right: 10px;
+}
+
+.signup-form label{
+  float: left;
+  font-size: 20px;
+  color: black;
+  width: 100px;
+}
+
+.signup-form button {
+  display: block;
+  width: 100%;
+  height: 40px;
+  border: none;
+  background-color: #ccc;
+  font-family: arial;
+  font-size: 16px;
+  color: #111;
+  cursor: pointer;
+}
+
+.signup-form button:hover {
+  background-color: #8c8c8c;
+}
+
+.signup {
+  width: 400px;
+  padding-top: 10px;
+  border-radius: 5px;
+}
+
+.signup input {
+  margin: 0 auto;
+  width: 60%;
+  padding: 0px 5%;
+  background-color: #fff;
+  font-family: arial;
+  font-size: 16px;
+  color: #111;
+  line-height: 30px;
+  margin-bottom: 4px;
+}
+
+.signup button {
+  display: block;
+  height: 40px;
+  font-family: arial;
+  font-size: 16px;
+  color: #111;
+  padding: 4px;
+  background-color: #fff;
+  text-align: center;
+  cursor: pointer;
+  width: 20%
+}
+
+.signup button:hover {
+  background-color: #8c8c8c;
+}
+
+.signup-form button:hover {
+  background-color: #8c8c8c;
+}
+
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(odd) {
+    background: rgb(41, 163, 163, 0.7)
+}
+
+/*=========================================================================*/
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+  background-color: rgb(102, 153, 255);
+}
+
+.title {
+  font-size: 18px;
+  text-align: center;
+}
+
+
+a {
+  text-decoration: none;
+  font-size: 22px;
+  color: black;
+  text-align: center;
+  margin-right: 20px;
+}
+
+button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #3366ff;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+button:hover, a:hover {
+  opacity: 0.7;
+}
+
+/*==========================================================================*/
+.error {
+  color: red;
+  text-align: center;
+}
+
+.success {
+  color: #00b300;
+  text-align: center;
+}

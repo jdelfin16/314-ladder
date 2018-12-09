@@ -1,4 +1,5 @@
 <?php
+  /*
   include "../database.php";
   include "../rest.php";
 
@@ -23,6 +24,72 @@
   $username = $response["username"];
   $password = $response["password"];
   $rank = $response["rank"];
+  */
+
+  // Function for verifying the player, challenger, or challengee based on the player table
+  function check_player ($connection, $player)
+  {
+    // Querys
+    $sql = "select distinct username from player;";
+
+    // Set up query
+    $statement = $connection->prepare($sql);
+
+    // Run the query - fetching the columns
+    $statement->execute();
+    if ($statement->rowCount() > 0)
+    {
+      $players = $statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+    else
+    {
+      $players = [];
+    }
+
+    // If the player is in the array...
+      // If the player exists
+    if (in_array($player, $players))
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  // For INSERT - Function for checking if player already exists
+  function check_current_player ($connection, $player)
+  {
+    // Querys
+    $sql = "select distinct username from player;";
+
+    // Set up query
+    $statement = $connection->prepare($sql);
+
+    // Run the query - fetching the columns
+    $statement->execute();
+    if ($statement->rowCount() > 0)
+    {
+      $players = $statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+    else
+    {
+      $players = [];
+    }
+
+    // If the player is in the array...
+      // If the player already exists = DO NOT INSERT
+      // If the player does not exist yet = INSERT
+    if (!in_array($player, $players)) // KEY CHARACTER: !
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
 
   // Function validating the phone number
   function validate_phone($phone)
@@ -36,7 +103,6 @@
       return false;
     }
   }
-  // echo json_encode(validate_phone($phone));
 
   // Function validating the email
   function validate_email($email)
@@ -99,7 +165,7 @@
     }
 
     // Else, if the method is for UPDATE...
-    else if ($method == "PUT" && $num_of_param == 4)
+    else if ($method == "PUT" && $num_of_param == 5)
     {
       return true;
     }
